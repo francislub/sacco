@@ -1,0 +1,65 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  email         String    @unique
+  password      String
+  role          Role      @default(USER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  account       Account?
+  transactions  Transaction[]
+}
+
+model Account {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  accountNumber String    @unique
+  balance       Float     @default(0)
+  userId        String    @unique @db.ObjectId
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  transactions  Transaction[]
+}
+
+model Transaction {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  type          TransactionType
+  amount        Float
+  description   String?
+  accountId     String    @db.ObjectId
+  account       Account   @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  userId        String    @db.ObjectId
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt     DateTime  @default(now())
+}
+
+model Announcement {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  title         String
+  content       String
+  createdAt     DateTime  @default(now())
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+enum TransactionType {
+  DEPOSIT
+  WITHDRAW
+  TRANSFER
+}
+
