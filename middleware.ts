@@ -6,52 +6,40 @@ export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname
 
   // Define public paths that don't require authentication
-  const publicPaths = ["/", "/login"]
-  const isPublicPath = publicPaths.some((publicPath) => path === publicPath || path.startsWith("/api/auth"))
+  const isPublicPath = path === "/login" || path === "/register" || path === "/"
 
-  // Get the session token
+  // Get the token
   const token = await getToken({
     req: request,
     secret: process.env.NEXTAUTH_SECRET,
   })
 
   // Redirect logic
-  if (!token && !isPublicPath) {
-    // Redirect to login if trying to access protected route without being logged in
+  if (isPublicPath && token) {
+    // If user is already logged in and tries to access login/register page
+    // Redirect to appropriate dashboard based on role
+    if (token.role === "ADMIN") {
+      return NextResponse.redirect(new URL("/admin/dashboard", request.url))
+    } else {
+      return NextResponse.redirect(new URL("/dashboard", request.url))
+    }
+  }
+
+  if (!isPublicPath && !token) {
+    // If user is not logged in and tries to access protected route
     return NextResponse.redirect(new URL("/login", request.url))
   }
 
   // Role-based access control
-  if (token) {
-    const userRole = token.role as string
-
-    // Check if user is trying to access a dashboard they don't have permission for
-    if (path.startsWith("/dashboard/")) {
-      const roleFromPath = path.split("/")[2] // Extract role from path
-
-      // Convert roleFromPath to match the format in the token
-      const normalizedRoleFromPath =
-        roleFromPath === "admin"
-          ? "ADMIN"
-          : roleFromPath === "teacher"
-            ? "TEACHER"
-            : roleFromPath === "parent"
-              ? "PARENT"
-              : ""
-
-      if (normalizedRoleFromPath && normalizedRoleFromPath !== userRole) {
-        // Redirect to the correct dashboard based on user role
-        const correctPath = `/dashboard/${userRole.toLowerCase()}`
-        return NextResponse.redirect(new URL(correctPath, request.url))
-      }
-    }
+  if (token && path.startsWith("/admin") && token.role !== "ADMIN") {
+    // If non-admin user tries to access admin routes
+    return NextResponse.redirect(new URL("/dashboard", request.url))
   }
 
   return NextResponse.next()
 }
 
-// Configure which paths the middleware should run on
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 }
 
