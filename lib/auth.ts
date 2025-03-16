@@ -1,7 +1,7 @@
-import type { NextAuthOptions } from "next-auth"
-import CredentialsProvider from "next-auth/providers/credentials"
-import { compare } from "bcrypt"
-import prisma from "@/lib/prisma"
+import type { NextAuthOptions } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+import { compare } from "bcrypt";
+import prisma from "@/lib/prisma";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -13,23 +13,20 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          return null
+          throw new Error("Missing email or password");
         }
 
         const user = await prisma.user.findUnique({
-          where: {
-            email: credentials.email,
-          },
-        })
+          where: { email: credentials.email },
+        });
 
         if (!user) {
-          return null
+          throw new Error("No user found with this email");
         }
 
-        const isPasswordValid = await compare(credentials.password, user.password)
-
+        const isPasswordValid = await compare(credentials.password, user.password);
         if (!isPasswordValid) {
-          return null
+          throw new Error("Incorrect password");
         }
 
         return {
@@ -37,23 +34,24 @@ export const authOptions: NextAuthOptions = {
           email: user.email,
           name: user.name,
           role: user.role,
-        }
+        };
       },
     }),
   ],
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id
-        token.role = user.role
+        token.id = user.id;
+        token.role = user.role;
       }
-      return token
+      return token;
     },
     async session({ session, token }) {
       if (session.user) {
-        ;(session.user as any).id = token.id(session.user as any).role = token.role
+        (session.user as any).id = token.id;
+        (session.user as any).role = token.role; // Fixed syntax
       }
-      return session
+      return session;
     },
   },
   pages: {
@@ -63,5 +61,4 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt",
   },
   secret: process.env.NEXTAUTH_SECRET,
-}
-
+};

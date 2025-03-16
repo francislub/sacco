@@ -17,7 +17,7 @@ export default async function UserLayout({
   }
 
   // If user is admin, redirect to admin dashboard
-  if ((session.user as any).role === "ADMIN") {
+  if (session.user.role === "ADMIN") {
     redirect("/admin/dashboard")
   }
 

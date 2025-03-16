@@ -11,7 +11,7 @@ export default async function UserDashboardPage() {
     return null
   }
 
-  const userId = (session.user as any).id
+  const userId = session.user.id
 
   // Get user account
   const account = await prisma.account.findUnique({

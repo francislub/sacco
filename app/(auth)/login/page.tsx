@@ -35,7 +35,15 @@ export default function LoginPage() {
       if (result?.error) {
         setError("Invalid email or password")
       } else {
-        router.push("/dashboard")
+        // Check if user is admin to redirect to the correct dashboard
+        const response = await fetch("/api/auth/session")
+        const session = await response.json()
+
+        if (session?.user?.role === "ADMIN") {
+          router.push("/admin/dashboard")
+        } else {
+          router.push("/dashboard")
+        }
         router.refresh()
       }
     } catch (error) {

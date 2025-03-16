@@ -12,10 +12,17 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { User, Settings, LogOut } from "lucide-react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 export function UserButton() {
   const { data: session } = useSession()
-  const isAdmin = session?.user && (session.user as any).role === "ADMIN"
+  const router = useRouter()
+  const isAdmin = session?.user?.role === "ADMIN"
+
+  const handleSignOut = async () => {
+    await signOut({ redirect: false })
+    router.push("/")
+  }
 
   return (
     <DropdownMenu>
@@ -47,7 +54,7 @@ export function UserButton() {
           </DropdownMenuItem>
         </Link>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => signOut({ callbackUrl: "/login" })}>
+        <DropdownMenuItem onClick={handleSignOut}>
           <LogOut className="mr-2 h-4 w-4" />
           <span>Log out</span>
         </DropdownMenuItem>

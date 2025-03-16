@@ -49,7 +49,7 @@ export function UserSidebar() {
         <Button
           variant="ghost"
           className="w-full justify-start text-gray-300 hover:bg-blue-700 hover:text-white"
-          onClick={() => signOut({ callbackUrl: "/login" })}
+          onClick={() => signOut({ callbackUrl: "/" })}
         >
           <LogOut className="h-5 w-5 mr-2" />
           <span>Sign Out</span>
