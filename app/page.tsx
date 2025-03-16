@@ -17,6 +17,50 @@ export default function Home() {
           Welcome to the Savings and Credit Cooperative Organization for Bugema University Employees
         </p>
 
+        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+          <Link href="/login">
+            <Button size="lg" className="w-full sm:w-auto px-8">
+              Login
+            </Button>
+          </Link>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-6 max-w-2xl mx-auto">
+          <div className="bg-white p-6 rounded-lg shadow-md border border-gray-100">
+            <div className="flex justify-center mb-4">
+              <div className="p-3 bg-blue-100 rounded-full">
+                <User className="h-8 w-8 text-blue-600" />
+              </div>
+            </div>
+            <h2 className="text-xl font-semibold mb-2">Member Registration</h2>
+            <p className="text-gray-600 mb-4">
+              Join as a regular member to save, access loans, and manage your finances.
+            </p>
+            <Link href="/register?role=user">
+              <Button className="w-full" variant="outline">
+                Register as Member
+              </Button>
+            </Link>
+          </div>
+
+          <div className="bg-white p-6 rounded-lg shadow-md border border-gray-100">
+            <div className="flex justify-center mb-4">
+              <div className="p-3 bg-purple-100 rounded-full">
+                <Shield className="h-8 w-8 text-purple-600" />
+              </div>
+            </div>
+            <h2 className="text-xl font-semibold mb-2">Admin Registration</h2>
+            <p className="text-gray-600 mb-4">
+              Register as an administrator to manage members, accounts, and SACCO operations.
+            </p>
+            <Link href="/register?role=admin">
+              <Button className="w-full" variant="outline">
+                Register as Admin
+              </Button>
+            </Link>
+          </div>
+        </div>
+
         <div className="mt-12 text-slate-500">
           <p>A secure platform for managing your savings and accessing credit facilities</p>
         </div>
