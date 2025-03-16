@@ -34,7 +34,8 @@ export function AdminDepositForm() {
         const response = await fetch("/api/accounts")
 
         if (!response.ok) {
-          throw new Error("Failed to fetch accounts")
+          const errorData = await response.json().catch(() => ({}))
+          throw new Error(errorData.error || "Failed to fetch accounts")
         }
 
         const data = await response.json()

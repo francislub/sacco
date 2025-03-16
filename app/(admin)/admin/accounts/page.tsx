@@ -4,8 +4,23 @@ import { formatCurrency } from "@/lib/utils"
 import prisma from "@/lib/prisma"
 import Link from "next/link"
 import { PlusCircle } from "lucide-react"
+import { getServerSession } from "next-auth/next"
+import { authOptions } from "@/lib/auth"
+import { redirect } from "next/navigation"
 
 export default async function AccountsPage() {
+  // Check authentication
+  const session = await getServerSession(authOptions)
+
+  if (!session) {
+    redirect("/login")
+  }
+
+  // Verify admin role
+  if (session.user.role !== "ADMIN") {
+    redirect("/dashboard")
+  }
+
   // Get all accounts with their users
   const accounts = await prisma.account.findMany({
     include: {

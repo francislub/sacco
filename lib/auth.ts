@@ -1,7 +1,7 @@
-import type { NextAuthOptions } from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import { compare } from "bcrypt";
-import prisma from "@/lib/prisma";
+import type { NextAuthOptions } from "next-auth"
+import CredentialsProvider from "next-auth/providers/credentials"
+import { compare } from "bcrypt"
+import prisma from "@/lib/prisma"
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -13,20 +13,23 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          throw new Error("Missing email or password");
+          return null
         }
 
         const user = await prisma.user.findUnique({
-          where: { email: credentials.email },
-        });
+          where: {
+            email: credentials.email,
+          },
+        })
 
         if (!user) {
-          throw new Error("No user found with this email");
+          return null
         }
 
-        const isPasswordValid = await compare(credentials.password, user.password);
+        const isPasswordValid = await compare(credentials.password, user.password)
+
         if (!isPasswordValid) {
-          throw new Error("Incorrect password");
+          return null
         }
 
         return {
@@ -34,24 +37,24 @@ export const authOptions: NextAuthOptions = {
           email: user.email,
           name: user.name,
           role: user.role,
-        };
+        }
       },
     }),
   ],
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id;
-        token.role = user.role;
+        token.id = user.id
+        token.role = user.role
       }
-      return token;
+      return token
     },
     async session({ session, token }) {
-      if (session.user) {
-        (session.user as any).id = token.id;
-        (session.user as any).role = token.role; // Fixed syntax
+      if (session?.user && token) {
+        session.user.id = token.id as string
+        session.user.role = token.role as string
       }
-      return session;
+      return session
     },
   },
   pages: {
@@ -60,5 +63,6 @@ export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
   },
-  secret: process.env.NEXTAUTH_SECRET,
-};
+  secret: process.env.NEXTAUTH_SECRET || "fallback-secret-do-not-use-in-production",
+}
+

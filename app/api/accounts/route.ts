@@ -7,11 +7,16 @@ export async function GET() {
   try {
     const session = await getServerSession(authOptions)
 
-    if (!session || (session.user as any).role !== "ADMIN") {
+    if (!session) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
+    // For regular users, only return their own account
+    // For admins, return all accounts
+    const where = session.user.role === "ADMIN" ? {} : { userId: session.user.id }
+
     const accounts = await prisma.account.findMany({
+      where,
       include: {
         user: {
           select: {
@@ -19,6 +24,9 @@ export async function GET() {
             email: true,
           },
         },
+      },
+      orderBy: {
+        createdAt: "desc",
       },
     })
 

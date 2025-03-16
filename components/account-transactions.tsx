@@ -30,7 +30,8 @@ export function AccountTransactions({ accountId }: AccountTransactionsProps) {
         const response = await fetch(`/api/accounts/${accountId}/transactions`)
 
         if (!response.ok) {
-          throw new Error("Failed to fetch transactions")
+          const errorData = await response.json().catch(() => ({}))
+          throw new Error(errorData.error || "Failed to fetch transactions")
         }
 
         const data = await response.json()
