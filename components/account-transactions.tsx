@@ -12,7 +12,7 @@ interface Transaction {
   createdAt: string
   user: {
     name: string
-  }
+  } | null
 }
 
 interface AccountTransactionsProps {
@@ -80,7 +80,7 @@ export function AccountTransactions({ accountId }: AccountTransactionsProps) {
               transactions.map((transaction) => (
                 <TableRow key={transaction.id}>
                   <TableCell>{new Date(transaction.createdAt).toLocaleString()}</TableCell>
-                  <TableCell>{transaction.user.name}</TableCell>
+                  <TableCell>{transaction.user?.name || "Unknown"}</TableCell>
                   <TableCell>
                     <span
                       className={

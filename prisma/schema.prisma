@@ -20,17 +20,20 @@ model User {
   updatedAt     DateTime  @updatedAt
   account       Account?
   transactions  Transaction[]
+  loans         Loan[]
+  verificationCodes VerificationCode[]
 }
 
 model Account {
   id            String    @id @default(auto()) @map("_id") @db.ObjectId
   accountNumber String    @unique
   balance       Float     @default(0)
-  userId        String    @unique @db.ObjectId
-  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        String?    @unique @db.ObjectId
+  user          User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   transactions  Transaction[]
+  loans         Loan[]
 }
 
 model Transaction {
@@ -43,6 +46,28 @@ model Transaction {
   userId        String    @db.ObjectId
   user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt     DateTime  @default(now())
+  loanId        String?   @db.ObjectId
+  loan          Loan?     @relation(fields: [loanId], references: [id])
+}
+
+model Loan {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  amount        Float
+  interestRate  Float     // Annual interest rate in percentage
+  term          Int       // Loan term in months
+  status        LoanStatus @default(PENDING)
+  purpose       String?
+  accountId     String    @db.ObjectId
+  account       Account   @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  userId        String    @db.ObjectId
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  approvedBy    String?   @db.ObjectId
+  approvedAt    DateTime?
+  disbursedAt   DateTime?
+  dueDate       DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  transactions  Transaction[]
 }
 
 model Announcement {
@@ -50,6 +75,17 @@ model Announcement {
   title         String
   content       String
   createdAt     DateTime  @default(now())
+}
+
+model VerificationCode {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  code          String
+  type          VerificationType
+  userId        String    @db.ObjectId
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt     DateTime
+  createdAt     DateTime  @default(now())
+  used          Boolean   @default(false)
 }
 
 enum Role {
@@ -61,5 +97,22 @@ enum TransactionType {
   DEPOSIT
   WITHDRAW
   TRANSFER
+  LOAN_DISBURSEMENT
+  LOAN_REPAYMENT
+}
+
+enum LoanStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  DISBURSED
+  PAID
+  DEFAULTED
+}
+
+enum VerificationType {
+  REGISTRATION
+  LOGIN
+  PASSWORD_RESET
 }
 

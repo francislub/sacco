@@ -16,7 +16,7 @@ interface Account {
   accountNumber: string
   user: {
     name: string
-  }
+  } | null
 }
 
 export function AdminDepositForm() {
@@ -126,7 +126,7 @@ export function AdminDepositForm() {
             <SelectContent>
               {accounts.map((account) => (
                 <SelectItem key={account.id} value={account.id}>
-                  {account.user.name} ({account.accountNumber})
+                  {account.user ? account.user.name : "No user"} ({account.accountNumber})
                 </SelectItem>
               ))}
             </SelectContent>

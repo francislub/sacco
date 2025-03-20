@@ -140,7 +140,7 @@ export function AdminWithdrawForm() {
             <SelectContent>
               {accounts.map((account) => (
                 <SelectItem key={account.id} value={account.id}>
-                  {account.user.name} ({account.accountNumber}) - {formatCurrency(account.balance)}
+                  {account.user?.name ? `${account.user.name} (${account.accountNumber})` : "No User"} - {formatCurrency(account.balance)}
                 </SelectItem>
               ))}
             </SelectContent>

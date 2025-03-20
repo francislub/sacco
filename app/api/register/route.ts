@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { hash } from "bcrypt"
 import prisma from "@/lib/prisma"
+import { createAndSendVerificationCode } from "@/lib/verification-code"
 
 export async function POST(req: Request) {
   try {
@@ -30,7 +31,7 @@ export async function POST(req: Request) {
       },
     })
 
-    // Generate account number (simple implementation)
+    // Generate account number
     const accountNumber = Math.floor(100000 + Math.random() * 900000).toString()
 
     // Create account for user
@@ -42,9 +43,12 @@ export async function POST(req: Request) {
       },
     })
 
+    // Create and send verification code
+    await createAndSendVerificationCode(user.id, email, "REGISTRATION")
+
     return NextResponse.json(
       {
-        message: "User registered successfully",
+        message: "User registered successfully. Please check your email for verification code.",
         user: {
           id: user.id,
           name: user.name,
