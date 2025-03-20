@@ -24,7 +24,7 @@ export default async function UserLayout({
 
   return (
     <SidebarProvider>
-      <div className="flex h-screen">
+      <div className="flex h-screen w-0 lg:w-screen">
         <UserSidebar />
         <SidebarInset>
           <div className="flex-1 flex flex-col">

@@ -24,7 +24,7 @@ export default async function AdminLayout({
 
   return (
     <SidebarProvider>
-      <div className="flex h-screen w-screen">
+      <div className="flex h-screen w-full">
         <AdminSidebar />
         <SidebarInset>
           <div className="flex-1 flex flex-col">
