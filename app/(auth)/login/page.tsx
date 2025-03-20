@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { useState } from "react"
-import { signIn } from "next-auth/react"
+import { signIn, useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -15,6 +15,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 
 export default function LoginPage() {
   const router = useRouter()
+  const { data: sessionData, status } = useSession()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
   const [email, setEmail] = useState("")
@@ -29,6 +30,12 @@ export default function LoginPage() {
     setError("")
 
     try {
+      console.log("Attempting sign in with:", {
+        email,
+        password,
+        verificationCode: showVerificationField ? verificationCode : undefined,
+      })
+
       const result = await signIn("credentials", {
         email,
         password,
@@ -36,37 +43,61 @@ export default function LoginPage() {
         redirect: false,
       })
 
+      console.log("Sign in result:", result)
+
       if (result?.error) {
         if (result.error === "CredentialsSignin" && !showVerificationField) {
           // Check if this is a 2FA request
-          const response = await fetch("/api/auth/session")
-          const session = await response.json()
+          console.log("Checking for 2FA requirement...")
 
-          if (session?.requires2FA) {
-            setShowVerificationField(true)
-            setUserId(session.user.id)
-            setError("Please enter the verification code sent to your email")
-          } else {
-            setError("Invalid email or password")
+          try {
+            const response = await fetch("/api/auth/session")
+            console.log("Session response status:", response.status)
+
+            const session = await response.json()
+            console.log("Session data:", session)
+
+            if (session?.requires2FA) {
+              console.log("2FA required, showing verification field")
+              setShowVerificationField(true)
+              setUserId(session.user.id)
+              setError("Please enter the verification code sent to your email")
+            } else {
+              console.log("Invalid credentials, no 2FA required")
+              setError("Invalid email or password")
+            }
+          } catch (sessionError) {
+            console.error("Error fetching session:", sessionError)
+            setError("Failed to check authentication status")
           }
         } else {
           setError(result.error === "CredentialsSignin" ? "Invalid verification code" : result.error)
         }
       } else {
         // Check if user is admin to redirect to the correct dashboard
-        const response = await fetch("/api/auth/session")
-        const session = await response.json()
+        console.log("Authentication successful, redirecting...")
 
-        if (session?.user?.role === "ADMIN") {
-          router.push("/admin/dashboard")
-        } else {
+        try {
+          const response = await fetch("/api/auth/session")
+          const session = await response.json()
+          console.log("Final session data for redirect:", session)
+
+          if (session?.user?.role === "ADMIN") {
+            router.push("/admin/dashboard")
+          } else {
+            router.push("/dashboard")
+          }
+          router.refresh()
+        } catch (redirectError) {
+          console.error("Error during redirect:", redirectError)
+          // Default redirect if we can't determine role
           router.push("/dashboard")
+          router.refresh()
         }
-        router.refresh()
       }
     } catch (error) {
+      console.error("Unexpected login error:", error)
       setError("An unexpected error occurred")
-      console.error(error)
     } finally {
       setIsLoading(false)
     }
@@ -80,6 +111,7 @@ export default function LoginPage() {
 
     setIsLoading(true)
     try {
+      console.log("Resending verification code to:", email)
       const response = await fetch("/api/resend-verification", {
         method: "POST",
         headers: {
