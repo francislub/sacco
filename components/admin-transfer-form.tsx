@@ -150,8 +150,8 @@ export function AdminTransferForm() {
             <SelectContent>
               {accounts.map((account) => (
                 <SelectItem key={account.id} value={account.id}>
-                  {account.user.name} ({account.accountNumber}) - {formatCurrency(account.balance)}
-                </SelectItem>
+                {account.user ? `${account.user.name} (${account.accountNumber}) - ${formatCurrency(account.balance)}` : `Unknown User (${account.accountNumber}) - ${formatCurrency(account.balance)}`}
+              </SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -174,8 +174,10 @@ export function AdminTransferForm() {
                 .filter((account) => account.id !== fromAccountId)
                 .map((account) => (
                   <SelectItem key={account.id} value={account.id}>
-                    {account.user.name} ({account.accountNumber})
-                  </SelectItem>
+                  {account.user
+                    ? `${account.user.name} (${account.accountNumber})`
+                    : `Unknown User (${account.accountNumber})`}
+                </SelectItem>
                 ))}
             </SelectContent>
           </Select>
