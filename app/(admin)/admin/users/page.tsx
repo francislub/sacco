@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { formatCurrency } from "@/lib/utils"
+import { DeleteUserButton } from "@/components/delete-user-button"
 import prisma from "@/lib/prisma"
 import Link from "next/link"
 import { PlusCircle } from "lucide-react"
@@ -60,12 +61,15 @@ export default async function UsersPage() {
                   <TableCell>{user.account ? formatCurrency(user.account.balance) : "N/A"}</TableCell>
                   <TableCell>{new Date(user.createdAt).toLocaleDateString()}</TableCell>
                   <TableCell>
+                  <div className="flex space-x-2">
                     <Link href={`/admin/users/${user.id}`}>
                       <Button variant="outline" size="sm">
                         View
                       </Button>
                     </Link>
-                  </TableCell>
+                    <DeleteUserButton userId={user.id} userName={user.name} />
+                  </div>
+              </TableCell>
                 </TableRow>
               ))
             )}

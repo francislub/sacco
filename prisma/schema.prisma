@@ -22,6 +22,8 @@ model User {
   transactions  Transaction[]
   loans         Loan[]
   verificationCodes VerificationCode[]
+  image         String?
+  emailVerified DateTime?
 }
 
 model Account {

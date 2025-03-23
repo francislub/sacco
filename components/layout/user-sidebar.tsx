@@ -41,7 +41,7 @@ export function UserSidebar() {
 
   return (
     <Sidebar className="w-64 bg-slate-800 text-white">
-      <SidebarHeader className="border-b border-slate-700">
+      <SidebarHeader className="border-b border-slate-700 bg-slate-800">
         <div className="flex items-center p-4">
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 text-white">
             <span className="text-xl font-bold">B</span>
@@ -50,7 +50,7 @@ export function UserSidebar() {
         </div>
       </SidebarHeader>
 
-      <SidebarContent>
+      <SidebarContent className="bg-slate-800">
         <SidebarMenu>
           {links.map((link) => {
             const Icon = link.icon
@@ -78,7 +78,7 @@ export function UserSidebar() {
         </SidebarMenu>
       </SidebarContent>
 
-      <SidebarFooter className="border-t border-slate-700">
+      <SidebarFooter className="border-t border-slate-700 bg-slate-800">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
