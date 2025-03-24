@@ -26,11 +26,24 @@ export default async function TransferPage() {
   }
 
   // Get all other accounts for transfer
+  type AccountWithUser = {
+    id: string
+    accountNumber: string
+    balance: number
+    userId: string | null
+    createdAt: Date
+    updatedAt: Date
+    user: { name: string }
+  }
+
   const otherAccounts = await prisma.account.findMany({
     where: {
       userId: {
         not: userId,
       },
+      NOT: {
+        userId: null
+      }
     },
     include: {
       user: {
@@ -39,7 +52,7 @@ export default async function TransferPage() {
         },
       },
     },
-  })
+  }) as AccountWithUser[]
 
   return (
     <div className="p-6">

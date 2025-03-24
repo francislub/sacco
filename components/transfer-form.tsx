@@ -97,7 +97,9 @@ export function TransferForm({ account, otherAccounts }: TransferFormProps) {
           <SelectContent>
             {otherAccounts.map((account) => (
               <SelectItem key={account.id} value={account.id}>
-                {account.user.name} ({account.accountNumber})
+                {account.user
+                  ? `${account.user.name} (${account.accountNumber})`
+                  : `Unknown User (${account.accountNumber})`}
               </SelectItem>
             ))}
           </SelectContent>

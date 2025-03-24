@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { use, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -32,7 +32,8 @@ interface Loan {
   }
 }
 
-export default function AdminLoanDetailPage({ params }: { params: { id: string } }) {
+export default function AdminLoanDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params) // Unwrap params
   const router = useRouter()
   const [loan, setLoan] = useState<Loan | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -44,7 +45,7 @@ export default function AdminLoanDetailPage({ params }: { params: { id: string }
   useEffect(() => {
     const fetchLoan = async () => {
       try {
-        const response = await fetch(`/api/loans/${params.id}`)
+        const response = await fetch(`/api/loans/${id}`)
 
         if (!response.ok) {
           throw new Error("Failed to fetch loan details")
@@ -61,7 +62,7 @@ export default function AdminLoanDetailPage({ params }: { params: { id: string }
     }
 
     fetchLoan()
-  }, [params.id])
+  }, [id])
 
   const handleApproveLoan = async () => {
     if (!loan) return

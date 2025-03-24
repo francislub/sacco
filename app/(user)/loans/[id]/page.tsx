@@ -12,7 +12,7 @@ import { TableHeader } from "@/components/ui/table"
 
 import { Table } from "@/components/ui/table"
 
-import { useEffect, useState } from "react"
+import { use, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -36,7 +36,8 @@ interface Loan {
   }
 }
 
-export default function LoanDetailPage({ params }: { params: { id: string } }) {
+export default function LoanDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params) // Unwrap params
   const router = useRouter()
   const [loan, setLoan] = useState<Loan | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -45,7 +46,7 @@ export default function LoanDetailPage({ params }: { params: { id: string } }) {
   useEffect(() => {
     const fetchLoan = async () => {
       try {
-        const response = await fetch(`/api/loans/${params.id}`)
+        const response = await fetch(`/api/loans/${id}`) // Use extracted id
 
         if (!response.ok) {
           throw new Error("Failed to fetch loan details")
@@ -62,7 +63,7 @@ export default function LoanDetailPage({ params }: { params: { id: string } }) {
     }
 
     fetchLoan()
-  }, [params.id])
+}, [id]) // Use extracted id
 
   if (isLoading) {
     return <div className="p-6 text-center">Loading loan details...</div>
