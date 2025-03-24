@@ -59,7 +59,7 @@ export async function POST(request: Request) {
           amount,
           description: description || `Transfer to account ${toAccount.accountNumber}`,
           accountId: fromAccountId,
-          userId: fromAccount.userId,
+          userId: fromAccount.userId ?? "",
         },
       }),
       // Create deposit transaction for destination account
@@ -69,7 +69,7 @@ export async function POST(request: Request) {
           amount,
           description: description || `Transfer from account ${fromAccount.accountNumber}`,
           accountId: toAccountId,
-          userId: toAccount.userId,
+          userId: toAccount.userId ?? "",
         },
       }),
       // Update source account balance

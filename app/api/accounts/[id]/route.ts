@@ -31,7 +31,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
     }
 
     // Only allow users to view their own account or admins to view any account
-    if ((session.user as any).role !== "ADMIN" && account.user.id !== (session.user as any).id) {
+    if ((session.user as any).role !== "ADMIN" && (!account?.user?.id || account.user.id !== (session.user as any).id)) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     }
 

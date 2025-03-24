@@ -94,7 +94,7 @@ export async function POST(request: Request) {
           amount,
           description: description || "",
           accountId,
-          userId: account.userId,
+          userId: account.userId ?? "",
         },
       }),
       prisma.account.update({
