@@ -4,7 +4,7 @@ import { getUserByEmail } from "@/lib/data"
 import { db } from "@/lib/db"
 import bcrypt from "bcryptjs"
 import nodemailer from "nodemailer"
-import { VerificationType } from "@prisma/client" // Example import
+import type { VerificationType } from "@prisma/client"
 
 export const authOptions: NextAuthOptions = {
   session: {
@@ -95,13 +95,16 @@ export const authOptions: NextAuthOptions = {
       return token
     },
     async session({ session, token }) {
+      // Initialize session.user if it doesn't exist
+      if (!session.user) {
+        session.user = {}
+      }
+
       if (token) {
-        session.user = {
-          id: token.id as string,
-          name: token.name as string,
-          email: token.email as string,
-          role: token.role as string,
-        }
+        session.user.id = token.id as string
+        session.user.name = token.name as string
+        session.user.email = token.email as string
+        session.user.role = token.role as string
 
         // Pass the requires2FA flag to the session
         if (token.requires2FA) {
@@ -115,8 +118,9 @@ export const authOptions: NextAuthOptions = {
     signIn: "/login",
     error: "/login",
   },
+  // Use environment variables with fallbacks for development
+  secret: process.env.NEXTAUTH_SECRET || "1234567890qwertfgjvb",
   debug: process.env.NODE_ENV === "development",
-  secret: process.env.NEXTAUTH_SECRET,
 }
 
 // Helper function to validate verification code
@@ -129,7 +133,7 @@ async function validateVerificationCode(userId: string, code: string, type: "REG
       where: {
         userId,
         code,
-        type: type as VerificationType, 
+        type: type as VerificationType,
         expiresAt: {
           gt: new Date(),
         },
@@ -176,7 +180,7 @@ async function generateAndSendVerificationCode(
     await db.verificationCode.deleteMany({
       where: {
         userId,
-        type: type as VerificationType, 
+        type: type as VerificationType,
       },
     })
 
@@ -185,7 +189,7 @@ async function generateAndSendVerificationCode(
       data: {
         userId,
         code,
-        type: type as VerificationType, 
+        type: type as VerificationType,
         expiresAt,
       },
     })
@@ -266,4 +270,3 @@ async function sendVerificationEmail(email: string, code: string, type: "REGISTE
     return false
   }
 }
-
