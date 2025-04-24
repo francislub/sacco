@@ -26,45 +26,26 @@ export default function LoginPage() {
     setError("")
 
     try {
-      // First, attempt to login with credentials
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
+      // Sign in directly with credentials
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
       })
 
-      const data = await response.json()
-
-      if (!response.ok) {
-        throw new Error(data.error || "Invalid credentials")
+      if (result?.error) {
+        throw new Error(result.error)
       }
 
-      if (data.requires2FA) {
-        // Redirect to verification page with necessary params
-        router.push(`/verify?userId=${data.userId}&email=${encodeURIComponent(email)}&type=LOGIN`)
+      // Get user role to determine redirect
+      const userResponse = await fetch("/api/auth/me")
+      const userData = await userResponse.json()
+
+      // Redirect based on user role
+      if (userData.role === "ADMIN") {
+        router.push("/admin/dashboard")
       } else {
-        // If 2FA is not required, sign in directly
-        const result = await signIn("credentials", {
-          email,
-          password,
-          redirect: false,
-        })
-
-        if (result?.error) {
-          throw new Error(result.error)
-        }
-
-        // Redirect based on user role
-        if (data.role === "ADMIN") {
-          router.push("/admin/dashboard")
-        } else {
-          router.push("/dashboard")
-        }
+        router.push("/dashboard")
       }
     } catch (error: any) {
       console.error("Login error:", error)
@@ -140,4 +121,3 @@ export default function LoginPage() {
     </div>
   )
 }
-
