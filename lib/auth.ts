@@ -17,7 +17,8 @@ export const authOptions: NextAuthOptions = {
       credentials: {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
-        verificationCode: { label: "Verification Code", type: "text" },
+        // Commenting out verification code field as we're bypassing email verification
+        // verificationCode: { label: "Verification Code", type: "text" },
       },
       async authorize(credentials, req) {
         try {
@@ -40,6 +41,8 @@ export const authOptions: NextAuthOptions = {
             return null
           }
 
+          // Commenting out verification code validation
+          /*
           // If verification code is provided, validate it
           if (credentials.verificationCode) {
             console.log("Validating verification code:", credentials.verificationCode)
@@ -72,6 +75,17 @@ export const authOptions: NextAuthOptions = {
             role: user.role,
             requires2FA: true,
           }
+          */
+
+          // Bypass email verification and directly return the user
+          console.log("Email verification bypassed, returning user directly")
+          return {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+            // No requires2FA flag
+          }
         } catch (error) {
           console.error("Error in authorize function:", error)
           return null
@@ -87,10 +101,13 @@ export const authOptions: NextAuthOptions = {
         token.email = user.email
         token.role = user.role
 
+        // Commenting out 2FA flag handling
+        /*
         // Pass the requires2FA flag to the token
         if ((user as any).requires2FA) {
           token.requires2FA = true
         }
+        */
       }
       return token
     },
@@ -106,10 +123,13 @@ export const authOptions: NextAuthOptions = {
         session.user.email = token.email as string
         session.user.role = token.role as string
 
+        // Commenting out 2FA flag handling
+        /*
         // Pass the requires2FA flag to the session
         if (token.requires2FA) {
           ;(session as any).requires2FA = true
         }
+        */
       }
       return session
     },
@@ -119,9 +139,11 @@ export const authOptions: NextAuthOptions = {
     error: "/login",
   },
   // Use environment variables with fallbacks for development
-  secret: process.env.NEXTAUTH_SECRET || "1234567890qwertfgjvb",
+  secret: process.env.NEXTAUTH_SECRET || "your-development-secret-do-not-use-in-production",
   debug: process.env.NODE_ENV === "development",
 }
+
+// Helper functions are kept but commented out for future use if needed
 
 // Helper function to validate verification code
 async function validateVerificationCode(userId: string, code: string, type: "REGISTER" | "LOGIN" | "PASSWORD_RESET") {
