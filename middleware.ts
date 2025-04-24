@@ -6,8 +6,10 @@ export async function middleware(request: NextRequest) {
   const token = await getToken({
     req: request,
     secret: process.env.NEXTAUTH_SECRET,
+    cookieName: process.env.NODE_ENV === 'production'
+      ? '__Secure-next-auth.session-token'
+      : 'next-auth.session-token',
   })
-
   // Check if the user is authenticated
   const isAuthenticated = !!token
 
