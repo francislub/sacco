@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Menu, X } from "lucide-react"
@@ -21,10 +22,13 @@ export default function Header() {
   return (
     <header className="bg-gray-100 shadow-sm">
       <nav className="container mx-auto flex items-center justify-between p-4 lg:px-8" aria-label="Global">
+      {/* <div className="bg-white rounded-full p-1"> */}
+        <Image src="/bugema.png" alt="Bugema University Logo" width={70} height={70} className="rounded-full" />
+      {/* </div> */}
         <div className="flex lg:flex-1">
           <Link href="/" className="-m-1.5 p-1.5 flex items-center">
             <span className="text-xl font-bold text-[#002147]">BUESACCO</span>
-            <span className="text-sm text-gray-600 ml-2 hidden sm:block">Bugema University SACCO</span>
+            {/* <span className="text-sm text-gray-600 ml-2 hidden sm:block">Bugema University SACCO</span> */}
           </Link>
         </div>
         <div className="flex lg:hidden">

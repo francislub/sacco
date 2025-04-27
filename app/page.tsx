@@ -15,7 +15,7 @@ export default function Home() {
       <section className="relative bg-[#5d5545] text-white">
         <div className="absolute inset-0 z-0">
           <Image
-            src=""
+            src="/busaco.jpg"
             alt="Hero background"
             fill
             className="object-cover opacity-30"
@@ -25,9 +25,9 @@ export default function Home() {
         <div className="container relative z-10 py-20 md:py-32">
           <div className="max-w-2xl">
             <div className="flex items-center gap-4 mb-4">
-              <div className="bg-white rounded-full p-1">
-                <Image src="/logo.png" alt="Bugema University Logo" width={80} height={80} className="rounded-full" />
-              </div>
+              {/* <div className="bg-white rounded-full p-1">
+                <Image src="/bugema.png" alt="Bugema University Logo" width={80} height={80} className="rounded-full" />
+              </div> */}
               <div>
                 <h2 className="text-xl md:text-2xl font-medium">Bugema University</h2>
                 <h3 className="text-xl md:text-2xl font-medium text-yellow-300">Savings & Credit Cooperative</h3>
@@ -46,7 +46,7 @@ export default function Home() {
                 </Button>
               </Link>
               <Link href="/loans">
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+                <Button size="lg" variant="outline" className="border-white text-black hover:bg-white/10">
                   Explore Loan Options <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
@@ -69,7 +69,7 @@ export default function Home() {
               icon={<PiggyBank className="h-8 w-8 text-[#002147]" />}
               title="Savings Programs"
               description="Build your financial future with our flexible savings options offering competitive returns and secure growth opportunities."
-              imageSrc="/images/savings.jpg"
+              imageSrc="/celeb.jpg"
               linkHref="/savings"
             />
 
@@ -77,7 +77,7 @@ export default function Home() {
               icon={<CreditCard className="h-8 w-8 text-[#002147]" />}
               title="Loan Options"
               description="Access affordable loans with flexible repayment terms for education, home improvement, emergencies, and more."
-              imageSrc="/images/loans.jpg"
+              imageSrc="/one.jpg"
               linkHref="/loans"
             />
 
@@ -85,7 +85,7 @@ export default function Home() {
               icon={<Users className="h-8 w-8 text-[#002147]" />}
               title="Membership"
               description="Join our community and enjoy exclusive benefits, financial education resources, and networking opportunities."
-              imageSrc="/images/membership.jpg"
+              imageSrc="/two.jpg"
               linkHref="/membership"
             />
           </div>
@@ -149,21 +149,21 @@ export default function Home() {
               date="March 15, 2025"
               title="New Education Loan Package Launched"
               content="BUESACCO introduces a specialized loan package for staff pursuing further education with competitive interest rates and flexible repayment terms."
-              imageSrc="/images/education-loan.jpg"
+              imageSrc="/three.jpg"
             />
 
             <NewsCard
               date="April 5, 2025"
               title="Annual General Meeting Scheduled"
               content="Members are invited to attend the Annual General Meeting on April 20th where dividends for the previous financial year will be announced."
-              imageSrc="/images/meeting.jpg"
+              imageSrc="/four.jpg"
             />
 
             <NewsCard
               date="February 28, 2025"
               title="Financial Literacy Workshop Series"
               content="Join our upcoming workshop series covering investment strategies, retirement planning, and effective debt management."
-              imageSrc="/images/workshop.jpg"
+              imageSrc="/five.jpg"
             />
           </div>
         </div>
