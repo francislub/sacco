@@ -235,7 +235,7 @@ export default function MembershipPage() {
                 position: "Lecturer, Faculty of Education",
                 quote:
                   "BUESACCO has been instrumental in helping me achieve my financial goals. The education loan I received enabled me to complete my PhD without financial stress.",
-                image: "/images/testimonial-1.jpg",
+                image: "/people.jpg",
               },
               {
                 name: "Mr. David Mugisha",

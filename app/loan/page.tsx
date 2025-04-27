@@ -52,13 +52,13 @@ export default function LoansPage() {
               </Link>
             </div>
             <div className="relative h-80 rounded-lg overflow-hidden">
-              <Image src="/images/personal-loan.jpg" alt="Personal Loan" fill className="object-cover" />
+              <Image src="/nine.jpg" alt="Personal Loan" fill className="object-cover" />
             </div>
           </div>
 
           <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
             <div className="order-2 md:order-1 relative h-80 rounded-lg overflow-hidden">
-              <Image src="/images/education-loan.jpg" alt="Education Loan" fill className="object-cover" />
+              <Image src="/plan.jpg" alt="Education Loan" fill className="object-cover" />
             </div>
             <div className="order-1 md:order-2">
               <h2 className="text-3xl font-bold mb-4 text-[#002147]">Education Loans</h2>
@@ -116,7 +116,7 @@ export default function LoansPage() {
               </Link>
             </div>
             <div className="relative h-80 rounded-lg overflow-hidden">
-              <Image src="/images/emergency-loan.jpg" alt="Emergency Loan" fill className="object-cover" />
+              <Image src="/money.jpg" alt="Emergency Loan" fill className="object-cover" />
             </div>
           </div>
         </div>
