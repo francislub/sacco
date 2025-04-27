@@ -51,13 +51,13 @@ export default function SavingsPage() {
               </Link>
             </div>
             <div className="relative h-80 rounded-lg overflow-hidden">
-              <Image src="/images/regular-savings.jpg" alt="Regular Savings Account" fill className="object-cover" />
+              <Image src="/seven.jpg" alt="Regular Savings Account" fill className="object-cover" />
             </div>
           </div>
 
           <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
             <div className="order-2 md:order-1 relative h-80 rounded-lg overflow-hidden">
-              <Image src="/images/fixed-deposit.jpg" alt="Fixed Deposit Account" fill className="object-cover" />
+              <Image src="/six.jpg" alt="Fixed Deposit Account" fill className="object-cover" />
             </div>
             <div className="order-1 md:order-2">
               <h2 className="text-3xl font-bold mb-4 text-[#002147]">Fixed Deposit Account</h2>
@@ -115,7 +115,7 @@ export default function SavingsPage() {
               </Link>
             </div>
             <div className="relative h-80 rounded-lg overflow-hidden">
-              <Image src="/images/education-savings.jpg" alt="Education Savings Plan" fill className="object-cover" />
+              <Image src="/eight.jpg" alt="Education Savings Plan" fill className="object-cover" />
             </div>
           </div>
         </div>
