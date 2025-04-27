@@ -242,14 +242,14 @@ export default function MembershipPage() {
                 position: "Administrative Staff",
                 quote:
                   "The financial literacy workshops organized by BUESACCO have transformed how I manage my finances. I've been able to save more and plan better for my future.",
-                image: "/images/testimonial-2.jpg",
+                image: "/people.jpg",
               },
               {
                 name: "Prof. John Mukasa",
                 position: "Head of Department, Business School",
                 quote:
                   "Being a member of BUESACCO for over 10 years has provided me with financial security and peace of mind. The competitive savings rates have helped me build substantial savings.",
-                image: "/images/testimonial-3.jpg",
+                image: "/people.jpg",
               },
             ].map((testimonial, index) => (
               <Card key={index}>

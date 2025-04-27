@@ -41,7 +41,7 @@ export default function AboutPage() {
               </p>
             </div>
             <div className="relative h-80 rounded-lg overflow-hidden">
-              <Image src="/images/about-us.jpg" alt="BUESACCO Office" fill className="object-cover" />
+              <Image src="/people.jpg" alt="BUESACCO Office" fill className="object-cover" />
             </div>
           </div>
         </div>
