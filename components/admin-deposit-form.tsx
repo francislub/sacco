@@ -158,6 +158,7 @@ export function AdminDepositForm() {
             <option value="">Select payment method</option>
             <option value="cash">Cash</option>
             <option value="mobile_money">Mobile Money</option>
+            <option value="airtel_money">Airtel Money</option>
             <option value="bank_transfer">Bank Transfer</option>
             <option value="credit_card">Credit Card</option>
           </select>
