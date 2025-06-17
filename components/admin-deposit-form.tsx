@@ -147,6 +147,22 @@ export function AdminDepositForm() {
         />
       </div>
       <div className="space-y-2">
+          <Label htmlFor="paymentMethod">Payment Method</Label>
+          <select
+            // id="paymentMethod"
+            id="description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="w-full rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="">Select payment method</option>
+            <option value="cash">Cash</option>
+            <option value="mobile_money">Mobile Money</option>
+            <option value="bank_transfer">Bank Transfer</option>
+            <option value="credit_card">Credit Card</option>
+          </select>
+        </div>
+      <div className="space-y-2">
         <Label htmlFor="description">Description (Optional)</Label>
         <Textarea
           id="description"
